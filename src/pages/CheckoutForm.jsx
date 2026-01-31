@@ -9,7 +9,7 @@ const CheckoutForm = () => {
     e.preventDefault();
 
     const { data } = await axios.post(
-      "http://localhost:5000/api/payments/create-intent",
+      "http://localhost:3000/api/payments/create-intent",
       { totalCost: 500 },
       {
         headers: {
