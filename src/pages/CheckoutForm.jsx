@@ -1,5 +1,6 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import axios from "axios";
+import { API_BASE } from "../utils/axiosSecure";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -9,7 +10,7 @@ const CheckoutForm = () => {
     e.preventDefault();
 
     const { data } = await axios.post(
-      "http://localhost:3000/api/payments/create-intent",
+      `${API_BASE}/api/payments/create-intent`,
       { totalCost: 500 },
       {
         headers: {

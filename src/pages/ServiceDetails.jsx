@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import axios from "axios";
+import { API_BASE } from "../utils/axiosSecure";
 
 const ServiceDetails = () => {
   const { id: slug } = useParams();
@@ -10,7 +11,7 @@ const ServiceDetails = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/services/${slug}`)
+      .get(`${API_BASE}/api/services/${slug}`)
       .then((res) => {
         setService(res.data);
         setLoading(false);

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { API_BASE } from "../utils/axiosSecure";
 
 const Services = () => {
   const [services, setServices] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:3000/api/services")
+    axios.get(`${API_BASE}/api/services`)
       .then(res => setServices(res.data))
       .catch(err => console.error(err));
   }, []);

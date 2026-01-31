@@ -7,6 +7,7 @@ import {
   onAuthStateChanged,
 } from "firebase/auth";
 import axios from "axios";
+import { API_BASE } from "../utils/axiosSecure";
 
 export const AuthContext = createContext(null);
 
@@ -19,7 +20,7 @@ const AuthProvider = ({ children }) => {
   const googleLogin = async () => {
     const result = await signInWithPopup(auth, provider);
 
-    const res = await axios.post("http://localhost:3000/api/auth/login", {
+    const res = await axios.post(`${API_BASE}/api/auth/login`, {
       email: result.user.email,
     });
 
