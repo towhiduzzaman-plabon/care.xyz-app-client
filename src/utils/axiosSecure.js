@@ -11,7 +11,7 @@ if (import.meta.env.MODE === "production") {
   if (!import.meta.env.VITE_API_BASE) {
     // eslint-disable-next-line no-console
     console.error(
-      "[CONFIG] VITE_API_BASE is not defined for production. API requests will use relative "/api" and may fail if the backend is hosted on a different domain."
+      '[CONFIG] VITE_API_BASE is not defined for production. API requests will use relative "/api" and may fail if the backend is hosted on a different domain.'
     );
     // force empty so we don’t accidentally use a localhost fallback
     API_BASE = "";
