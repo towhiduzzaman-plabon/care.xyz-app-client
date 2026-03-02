@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 const Register = () => {
   const { registerUser, googleLogin } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [nid, setNid] = useState("");
+  const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,7 +20,7 @@ const Register = () => {
     }
 
     try {
-      await registerUser(email, password);
+      await registerUser(name, email, password, nid, contact);
       Swal.fire("Success", "Registration successful", "success");
       navigate("/");
     } catch (err) {
@@ -30,8 +33,18 @@ const Register = () => {
       <h2 className="text-2xl font-bold mb-4">Register</h2>
 
       <form onSubmit={handleRegister}>
-        <input placeholder="Full Name" className="border p-2 w-full mb-2" />
-        <input placeholder="NID Number" className="border p-2 w-full mb-2" />
+        <input
+          placeholder="Full Name"
+          className="border p-2 w-full mb-2"
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          placeholder="NID Number"
+          className="border p-2 w-full mb-2"
+          onChange={(e) => setNid(e.target.value)}
+          required
+        />
         <input
           type="email"
           placeholder="Email"
@@ -39,7 +52,12 @@ const Register = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-        <input placeholder="Contact Number" className="border p-2 w-full mb-2" />
+        <input
+          placeholder="Contact Number"
+          className="border p-2 w-full mb-2"
+          onChange={(e) => setContact(e.target.value)}
+          required
+        />
         <input
           type="password"
           placeholder="Password"

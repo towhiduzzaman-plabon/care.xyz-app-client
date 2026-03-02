@@ -17,6 +17,19 @@ param(
   [switch]$SetEnv,
   [switch]$DryRun
 )
+# When the caller does not supply an ApiBase we try to read it from ../.env so that
+# a simple `.
+un.ps1 -SetEnv` will work even if you forget to pass the value.
+# This keeps the local .env and the Vercel environment in sync.
+if (-not $ApiBase) {
+  $envFile = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) "..\.env"
+  if (Test-Path $envFile) {
+    $line = Select-String -Path $envFile -Pattern '^VITE_API_BASE=(.+)$' | Select-Object -First 1
+    if ($line) {
+      $ApiBase = $line.Matches[0].Groups[1].Value.Trim()
+    }
+  }
+}
 
 function Exec($cmd) {
   Write-Host "\n> $cmd" -ForegroundColor Cyan
@@ -37,7 +50,7 @@ try {
 
 if ($SetEnv) {
   if (-not $ApiBase) {
-    Write-Host "When using -SetEnv you must pass -ApiBase 'https://your-backend.example.com'" -ForegroundColor Red
+    Write-Host "When using -SetEnv you must pass -ApiBase 'https://your-backend.example.com' or ensure .env contains a VITE_API_BASE value." -ForegroundColor Red
     exit 1
   }
 

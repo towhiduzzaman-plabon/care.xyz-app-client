@@ -5,6 +5,8 @@ import {
   signInWithPopup,
   signOut,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import axios from "axios";
 import { API_BASE } from "../utils/axiosSecure";
@@ -30,6 +32,40 @@ const AuthProvider = ({ children }) => {
     return result;
   };
 
+  const loginUser = async (email, password) => {
+    // sign in with Firebase using email/password
+    const result = await signInWithEmailAndPassword(auth, email, password);
+
+    // request JWT from backend
+    const res = await axios.post(`${API_BASE}/api/auth/login`, {
+      email: result.user.email,
+    });
+
+    localStorage.setItem("access-token", res.data.token);
+    setUser(result.user);
+
+    return result;
+  };
+
+  const registerUser = async (name, email, password, nid, contact) => {
+    // create firebase user
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+
+    // send registration to backend (stores plain password as per server comment)
+    const res = await axios.post(`${API_BASE}/api/auth/register`, {
+      name,
+      email,
+      password,
+      nid,
+      contact,
+    });
+
+    localStorage.setItem("access-token", res.data.token);
+    setUser(result.user);
+
+    return result;
+  };
+
   const logout = async () => {
     await signOut(auth);
     localStorage.removeItem("access-token");
@@ -46,7 +82,16 @@ const AuthProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading, googleLogin, logout }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        loading,
+        googleLogin,
+        loginUser,
+        registerUser,
+        logout,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

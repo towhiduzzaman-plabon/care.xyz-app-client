@@ -1,6 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import axios from "axios";
-import { API_BASE } from "../utils/axiosSecure";
+import axiosSecure from "../utils/axiosSecure";
 
 const CheckoutForm = () => {
   const stripe = useStripe();
@@ -9,15 +8,10 @@ const CheckoutForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const { data } = await axios.post(
-      `${API_BASE}/api/payments/create-intent`,
-      { totalCost: 500 },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    );
+    // axiosSecure automatically includes the access-token stored in localStorage
+    const { data } = await axiosSecure.post("/payments/create-intent", {
+      totalCost: 500,
+    });
 
     const result = await stripe.confirmCardPayment(data.clientSecret, {
       payment_method: {
